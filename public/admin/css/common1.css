@@ -1,0 +1,42 @@
+@charset "UTF-8";
+html,body {
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+/*lv ha*/
+a:link, a:visited, a:hover, a:active {
+  text-decoration: none;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.table.table-bordered td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+
+.body_bg{
+  background-color: #222d32;
+}
+
+.mt_150{
+  margin-top: 150px;
+}
+
+.mb_20 {
+  margin-bottom: 20px;
+}
+
+.panel h4 {
+  text-align: center;
+}
