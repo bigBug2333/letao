@@ -115,8 +115,20 @@ a:link, a:visited, a:hover, a:active {
   height: 100%;
   width: 100%;
   padding-left: 180px;
-  transition: all 1s;
-  padding-top: 70px;
+  /* transition: all 1s; */
+  /* padding-top: 70px; */
+}
+
+.lt_main .header {
+  height: 50px;
+  line-height: 50px;
+  background-color: #3c8dbc;
+  padding: 0 20px;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+.lt_main .header a {
+  color: #fff;
 }
 
 .lt_main.now {

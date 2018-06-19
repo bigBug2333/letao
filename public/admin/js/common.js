@@ -1,73 +1,81 @@
-/**
- * Created by HUCC on 2017/11/21.
- */
-//进度条功能
-//禁用进度环
-NProgress.configure({ showSpinner: false });
+/* 
+  common.js中是所有的通过的js功能
+*/
 
-//注册一个全局的ajaxStart事件，所有的ajax在开启的时候，会触发这个事件
-$(document).ajaxStart(function () {
-  //开启进度条
+//每个页面一加载，就需要发送一个ajax请求，判断当前用户是否登录
+//如果当前用户没有登录，需要跳转登录页面
+//如果是login页面，是不需要判断有没有登录
+
+//如果不是login页面，需要先发送ajax请求，判断用户是否登录了
+if (location.href.indexOf("login.html") == -1) {
+  $.ajax({
+    type: "get",
+    url: "/employee/checkRootLogin",
+    success: function(info) {
+      if (info.error) {
+        location.href = "login.html";
+      }
+    }
+  });
+}
+
+//配置关闭了进度环
+//NProgress.configure({ showSpinner: false });
+//所有的ajax开始的时候，会触发的事件
+$(document).ajaxStart(function() {
+  //console.log("开始啦......");
   NProgress.start();
 });
 
-$(document).ajaxStop(function () {
-  //完成进度条
-  setTimeout(function () {
+$(document).ajaxStop(function() {
+  setTimeout(function() {
     NProgress.done();
   }, 500);
 });
 
+//二级分类的显示与隐藏
+//1. 点击分类管理
+//2. 让分类管理下二级菜单显示或者隐藏
+$(".child")
+  .prev()
+  .on("click", function() {
+    $(this)
+      .next()
+      .slideToggle();
+  });
 
-//非登陆页面，判断当前用户是否是登录了，如果登录了，就继续，如果没登陆，需要跳转到登录页面。
-if(location.href.indexOf("login.html") == -1){
+/* 
+    点击切换按钮，显示隐藏侧边栏
+    1. 找到切换按钮
+    2. 切换
+  */
+$(".icon_menu").on("click", function() {
+  $(".lt_aside").toggleClass("now");
+  $(".lt_main").toggleClass("now");
+});
+
+/* 
+    退出功能
+      1. 点击退出按钮 
+      2. 显示退出的模态框
+      3. 点击退出模态框中确认按钮，退出即可。需要发送ajax请求，告诉服务端，需要退出
+  */
+$(".icon_logout").on("click", function() {
+  $("#logoutModal").modal("show");
+});
+
+$(".btn_logout").on("click", function() {
+  //退出
+  //跳转登录页 q q
+
   $.ajax({
-    type:"get",
-    url:"/employee/checkRootLogin",
-    success:function (data) {
-      if(data.error === 400){
-        //说明用户没有登录，跳转到登录页面
+    type: "get",
+    url: "/employee/employeeLogout",
+    success: function(info) {
+      //console.log(info);
+      if (info.success) {
         location.href = "login.html";
       }
     }
-  })
-}
-
-
-
-//二级分类显示隐藏功能
-$(".child").prev().on("click", function () {
-  $(this).next().slideToggle();
-});
-
-//侧边栏显示隐藏功能
-$(".icon_menu").on("click", function () {
-  $(".lt_aside").toggleClass("now");
-  $(".lt_main").toggleClass("now");
-  $(".lt_topbar").toggleClass("now");
-});
-
-
-//退出功能
-$(".icon_logout").on("click", function () {
-  $("#logoutModal").modal("show");
-
-
-  //给退出按钮注册事件, off:解绑所有的事件
-  $(".btn_logout").off().on("click", function () {
-    //console.log("Hehe");
-    //发送ajax请求，退出系统
-    $.ajax({
-      type:"get",
-      url:"/employee/employeeLogout",
-      success:function (data) {
-        if(data.success){
-          //退出成功
-          location.href = "login.html";
-        }
-      }
-    });
   });
 });
-
-
